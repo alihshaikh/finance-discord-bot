@@ -6,7 +6,7 @@ const {token, clientId, guildId} = require('./config.json');
 
 //"Guild" refers to the Discord Server
 //TO DO: Add more intents with additional functionality
-const client = new Client({ intents: [GatewayIntentBits.Guilds ]});
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates]});
 
 client.commands = new Collection();
 
