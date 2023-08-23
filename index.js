@@ -3,10 +3,15 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {Client, Events, GatewayIntentBits, Collection} = require('discord.js');
 const {token, clientId, guildId} = require('./config.json');
+const { Player } = require('discord-player');
+const { spawn } = require('child_process');
+
 
 //"Guild" refers to the Discord Server
 //TO DO: Add more intents with additional functionality
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates]});
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildIntegrations]});
+
+client.player = new Player(client);
 
 client.commands = new Collection();
 
@@ -52,6 +57,11 @@ client.on(Events.InteractionCreate, async interaction => {
 	}
 })
 
+client.on('voiceStateUpdate', (oldState, newState) => {
+    console.log(`Voice state update event received.`);
+    console.log(`Old State: ${oldState.member.user.tag} in ${oldState.channel ? oldState.channel.name : 'no channel'}`);
+    console.log(`New State: ${newState.member.user.tag} in ${newState.channel ? newState.channel.name : 'no channel'}`);
+ });
 
 client.once(Events.ClientReady, c => {
     console.log(`Ready! Logged in as ${c.user.tag}`);
